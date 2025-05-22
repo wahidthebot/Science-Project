@@ -1,6 +1,7 @@
 # Sullivan, Wahid
 # Science Fair Project
 
+import re
 import math
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -96,9 +97,14 @@ def SaveCSVAsAnimation(csvPath, animPath, measure, title):
 
 print("Beginning to create animations...")
 
-SaveCSVAsAnimation("decompositionData.csv", "outputAnimations/decomposition.mp4", measure="Decomposition_Rate_Percent", title="Decomposition Rate Per Decade")
-SaveCSVAsAnimation("diversityData.csv", "outputAnimations/diversity.mp4", measure="Diversity_Index", title="TODO")
-SaveCSVAsAnimation("extendedData.csv", "outputAnimations/extended.mp4", measure="Growth_Rate_Per_Day", title="TODO")
-SaveCSVAsAnimation("growthData.csv", "outputAnimations/growth.mp4", measure="Growth_Rate_Per_Day", title="TODO")
+with open("instructions.txt", "r") as inst:
+    content = inst.read()
+
+pattern = r'\(input="([^"]+)", output="([^"]+)", measure="([^"]+)", title="([^"]+)"\)'
+matches = re.findall(pattern, content)
+dataEntries = [{"input": m[0], "output": m[1], "measure": m[2], "title": m[3]} for m in matches]
+
+for entry in dataEntries:
+    SaveCSVAsAnimation(entry['input'], entry['output'], entry['measure'], entry['title'])
 
 print("Finished")

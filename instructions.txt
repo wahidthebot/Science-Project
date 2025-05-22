@@ -1,0 +1,4 @@
+(input="inputCSV/decompositionData.csv", output="outputAnimations/decomposition.mp4", measure="Decomposition_Rate_Percent", title="Decomposition Rate Per Decade")
+(input="inputCSV/diversityData.csv", output="outputAnimations/diversity.mp4", measure="Diversity_Index", title="TODO")
+(input="inputCSV/extendedData.csv", output="outputAnimations/extended.mp4", measure="Growth_Rate_Per_Day", title="TODO")
+(input="inputCSV/growthData.csv", output="outputAnimations/growth.mp4", measure="Growth_Rate_Per_Day", title="TODO")

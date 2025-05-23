@@ -46,6 +46,7 @@ def CalculateGrowthRate(temp, co2):
     tempFactor = math.pow(1.02, ((temp - 15) / 2))
     co2Factor = math.pow(1.01, ((co2 - 330) / 10))
     growthData = BASE_RATE * tempFactor * co2Factor
+    
     return growthData
 
 # GraphData GetGraphDataFromCSV(string csvPath);
@@ -94,14 +95,16 @@ def UpdateGraph(frame):
 # -- saves the csv (given in csvPath) as an animation (at animPath) given the y-axis: (measure)
 def SaveCSVAsAnimation(csvPath, animPath, measure, title):
     print("creating animation:", animPath, "from csv:", csvPath, "given the y-axis:", measure, end="...\n")
+    
     global currentGraph
     currentGraph = GetGraphDataFromCSV(csvPath, measure, title)
+
     global anim
     anim = animation.FuncAnimation(currentGraph.fig, UpdateGraph, frames=len(currentGraph.df), interval=DRAW_INTERVAL, blit=False)
     anim.save(animPath, writer="ffmpeg")
 
-# void Main(void);
-# -- entry point of the program
+# bool Main(void);
+# -- entry point of the program (True == Ok, False == Err)
 def Main():
     print("Beginning to create animations...")
 

@@ -1,12 +1,17 @@
 # Sullivan, Wahid
 # Science Fair Project
 
+# All of the libraries used
+
+import sys
 import re
 import math
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
+# GraphData(CSV df, DataFrame fig, Series xData, Series yData);
+# -- This type is used to store all relevant graph data per drawing session
 class GraphData:
     def __init__(self, df, fig, xData, yData):
         self.df = df
@@ -16,7 +21,7 @@ class GraphData:
 
 # Global variables
 
-global currentGraph
+global currentGraph 
 global line
 global anim
 
@@ -95,16 +100,31 @@ def SaveCSVAsAnimation(csvPath, animPath, measure, title):
     anim = animation.FuncAnimation(currentGraph.fig, UpdateGraph, frames=len(currentGraph.df), interval=DRAW_INTERVAL, blit=False)
     anim.save(animPath, writer="ffmpeg")
 
-print("Beginning to create animations...")
+# void Main(void);
+# -- entry point of the program
+def Main():
+    print("Beginning to create animations...")
 
-with open("instructions.txt", "r") as inst:
-    content = inst.read()
+    with open("instructions.txt", "r") as inst:
+        content = inst.read()
 
-pattern = r'\(input="([^"]+)", output="([^"]+)", measure="([^"]+)", title="([^"]+)"\)'
-matches = re.findall(pattern, content)
-dataEntries = [{"input": m[0], "output": m[1], "measure": m[2], "title": m[3]} for m in matches]
+    pattern = r'\(input="([^"]+)", output="([^"]+)", measure="([^"]+)", title="([^"]+)"\)'
+    matches = re.findall(pattern, content)
+    dataEntries = [{"input": m[0], "output": m[1], "measure": m[2], "title": m[3]} for m in matches]
 
-for entry in dataEntries:
-    SaveCSVAsAnimation(entry['input'], entry['output'], entry['measure'], entry['title'])
+    for entry in dataEntries:
+        try:
+            SaveCSVAsAnimation(entry['input'], entry['output'], entry['measure'], entry['title'])
+        except Exception as e:
+            print(f"Error from ('{entry['input']}') {type(e).__name__} - {e}", file=sys.stderr)
+            return False
 
-print("Finished")
+    print("Finished")
+
+    return True
+
+# Call Main()
+if __name__ == "__main__":
+    if not Main(): # If the main fn encounters an error
+        print("Animation creating halted; error encountered")
+        exit(1)
